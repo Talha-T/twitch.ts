@@ -23,7 +23,7 @@ const requestP = typeof fetch !== "undefined"
     });
     request.Response.prototype.json = function () {
         const text = this.content;
-        return new Promise((s) => JSON.parse(text));
+        return new Promise((s) => s(JSON.parse(text)));
     };
     return {
         delete: (url, headers) => request.delete(url, { headers }),
@@ -145,5 +145,6 @@ class ApiRequester {
         };
     }
 }
+ApiRequester.requestLib = requestP;
 exports.ApiRequester = ApiRequester;
 //# sourceMappingURL=requester.js.map

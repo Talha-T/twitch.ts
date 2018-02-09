@@ -1,4 +1,17 @@
 import { ILooseObject } from "./looseObject";
+export interface IHeaders {
+    [k: string]: string;
+}
+export interface IMinimalResponse {
+    status: number;
+    json(): Promise<any>;
+}
+export interface IMinimalFetch {
+    get: (url: string, headers: IHeaders) => Promise<IMinimalResponse>;
+    post: (url: string, headers: IHeaders) => Promise<IMinimalResponse>;
+    put: (url: string, headers: IHeaders) => Promise<IMinimalResponse>;
+    delete: (url: string, headers: IHeaders) => Promise<IMinimalResponse>;
+}
 /**
  * Interface class for requesters
  */
@@ -12,6 +25,7 @@ export interface IRequester {
  * The main Api Requester
  */
 export declare class ApiRequester implements IRequester {
+    static requestLib: Promise<IMinimalFetch>;
     private baseUrl;
     private clientId;
     private oauth;

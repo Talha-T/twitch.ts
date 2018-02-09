@@ -4,16 +4,16 @@ import { ITwitchErrorResponse } from "./apiTypes";
 import { ILooseObject } from "./looseObject";
 import TwitchError from "./twitchError";
 
-interface IHeaders {
+export interface IHeaders {
     [k: string]: string;
 }
 
-interface IMinimalResponse {
+export interface IMinimalResponse {
     status: number;
     json(): Promise<any>;
 }
 
-interface IMinimalFetch {
+export interface IMinimalFetch {
     get: (url: string, headers: IHeaders) => Promise<IMinimalResponse>;
     post: (url: string, headers: IHeaders) => Promise<IMinimalResponse>;
     put: (url: string, headers: IHeaders) => Promise<IMinimalResponse>;
@@ -33,7 +33,7 @@ const requestP: Promise<IMinimalFetch> = typeof fetch !== "undefined"
         });
         (request.Response.prototype as any).json = function(this: { content: string; }) {
             const text: string = this.content;
-            return new Promise((s) => JSON.parse(text));
+            return new Promise((s) => s(JSON.parse(text)));
         };
 
         return {
@@ -58,6 +58,8 @@ export interface IRequester {
  * The main Api Requester
  */
 export class ApiRequester implements IRequester {
+    public static requestLib = requestP;
+
     private baseUrl: string = "https://api.twitch.tv/kraken/";
     private clientId: string = "";
     private oauth: string = "";
